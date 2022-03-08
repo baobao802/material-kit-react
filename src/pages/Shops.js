@@ -4,9 +4,9 @@ import { Grid, Button, Container, Stack, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
+import { ShopCard, ShopsSearch, ShopsSort } from '../sections/@dashboard/shops';
 //
-import POSTS from '../_mocks_/blog';
+import SHOPS from '../_mocks_/blog';
 
 // ----------------------------------------------------------------------
 
@@ -18,13 +18,13 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function Blog() {
+export default function Shops() {
   return (
-    <Page title="Dashboard: Blog | Minimal-UI">
+    <Page title="Dashboard: Shops | Minimal-UI">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Blog
+            Shops
           </Typography>
           <Button
             variant="contained"
@@ -37,13 +37,13 @@ export default function Blog() {
         </Stack>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch posts={POSTS} />
-          <BlogPostsSort options={SORT_OPTIONS} />
+          <ShopsSearch shops={SHOPS} />
+          <ShopsSort options={SORT_OPTIONS} />
         </Stack>
 
         <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <BlogPostCard key={post.id} post={post} index={index} />
+          {SHOPS.map((shop) => (
+            <ShopCard key={shop.id} shop={shop} />
           ))}
         </Grid>
       </Container>

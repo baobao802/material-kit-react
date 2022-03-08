@@ -36,18 +36,18 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-BlogPostsSearch.propTypes = {
-  posts: PropTypes.array.isRequired
+ShopsSearch.propTypes = {
+  shops: PropTypes.array.isRequired
 };
 
-export default function BlogPostsSearch({ posts }) {
+export default function ShopsSearch({ shops }) {
   return (
     <RootStyle>
       <Autocomplete
         size="small"
         disablePortal
         popupIcon={null}
-        options={posts}
+        options={shops}
         getOptionLabel={(post) => post.title}
         renderInput={(params) => (
           <TextField

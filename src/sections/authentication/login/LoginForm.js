@@ -14,15 +14,18 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import { useDispatch } from 'react-redux';
 import Iconify from '../../../components/Iconify';
+import { login } from '../authSlice';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
 
-  const LoginSchema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required')
   });
@@ -33,8 +36,9 @@ export default function LoginForm() {
       password: '',
       remember: true
     },
-    validationSchema: LoginSchema,
-    onSubmit: () => {
+    validationSchema,
+    onSubmit: (values) => {
+      dispatch(login());
       navigate('/dashboard', { replace: true });
     }
   });

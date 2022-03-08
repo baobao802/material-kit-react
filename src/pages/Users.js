@@ -16,7 +16,8 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  IconButton
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -24,16 +25,16 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 //
 import USERLIST from '../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
+  { id: 'fullName', label: 'Full name', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'position', label: 'Position', alignRight: false },
   { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' }
@@ -65,16 +66,20 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) =>
+        `${_user.firstName} ${_user.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Users() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('lastName');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -86,18 +91,18 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = USERLIST.map((n) => n.email);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, email) => {
+    const selectedIndex = selected.indexOf(email);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, email);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -120,7 +125,7 @@ export default function User() {
     setPage(0);
   };
 
-  const handleFilterByName = (event) => {
+  const handleFilterByEmail = (event) => {
     setFilterName(event.target.value);
   };
 
@@ -131,16 +136,16 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User | Minimal-UI">
+    <Page title="List Users">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Users
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/users/123"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             New User
@@ -151,7 +156,7 @@ export default function User() {
           <UserListToolbar
             numSelected={selected.length}
             filterName={filterName}
-            onFilterName={handleFilterByName}
+            onFilterName={handleFilterByEmail}
           />
 
           <Scrollbar>
@@ -170,8 +175,17 @@ export default function User() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const {
+                        id,
+                        firstName,
+                        lastName,
+                        email,
+                        position,
+                        status,
+                        avatarUrl,
+                        isVerified
+                      } = row;
+                      const isItemSelected = selected.indexOf(email) !== -1;
 
                       return (
                         <TableRow
@@ -185,19 +199,19 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, email)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
+                              <Avatar alt={email} src={avatarUrl} />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {`${firstName} ${lastName}`}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
+                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{position}</TableCell>
                           <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="left">
                             <Label
@@ -209,7 +223,14 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            {/* <UserMoreMenu /> */}
+                            <IconButton
+                              variant="contained"
+                              component={RouterLink}
+                              to={`/dashboard/users/${id}`}
+                            >
+                              <Iconify icon="eva:edit-fill" />
+                            </IconButton>
                           </TableCell>
                         </TableRow>
                       );
