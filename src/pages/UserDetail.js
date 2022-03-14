@@ -4,7 +4,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import Page from '../components/Page';
 import UserDetailForm from '../sections/@dashboard/user/UserDetailForm';
 import Iconify from '../components/Iconify';
-import USERLIST from '../_mocks_/user';
+import USERLIST from '../_mocks_/users';
 
 function UserDetail() {
   const { userId } = useParams();

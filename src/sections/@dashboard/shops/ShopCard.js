@@ -14,7 +14,7 @@ import Iconify from '../../../components/Iconify';
 
 const CardMediaStyle = styled('div')({
   position: 'relative',
-  paddingTop: 'calc(100% * 3 / 4)'
+  paddingTop: 'calc(100% * 35 / 64)'
 });
 
 const TitleStyle = styled(Link)({
@@ -57,11 +57,11 @@ ShopCard.propTypes = {
 };
 
 export default function ShopCard({ shop }) {
-  const { cover, title, view, comment, author, createdAt } = shop;
+  const { cover, name, description, views, favorites, owner } = shop;
 
   const SHOP_INFO = [
-    { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' }
+    { number: favorites, icon: 'eva:heart-fill' },
+    { number: views, icon: 'eva:eye-fill' }
   ];
 
   return (
@@ -79,9 +79,9 @@ export default function ShopCard({ shop }) {
               position: 'absolute'
             }}
           />
-          <AvatarStyle alt={author.name} src={author.avatarUrl} />
+          <AvatarStyle alt={owner.name} src={owner.avatarUrl} />
 
-          <CoverImgStyle alt={title} src={cover} />
+          <CoverImgStyle alt={name} src={cover} />
         </CardMediaStyle>
 
         <CardContent
@@ -104,15 +104,21 @@ export default function ShopCard({ shop }) {
             underline="hover"
             component={RouterLink}
           >
-            {title}
+            {name}
           </TitleStyle>
 
           <Typography
             gutterBottom
             variant="caption"
-            sx={{ color: 'text.disabled', display: 'block' }}
+            sx={{
+              color: 'text.disabled',
+              overflow: 'hidden',
+              WebkitLineClamp: 2,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical'
+            }}
           >
-            {fDate(createdAt)}
+            {description}
           </Typography>
 
           <InfoStyle>

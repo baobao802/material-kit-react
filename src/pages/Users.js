@@ -27,7 +27,7 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 //
-import USERLIST from '../_mocks_/user';
+import USERLIST from '../_mocks_/users';
 
 // ----------------------------------------------------------------------
 

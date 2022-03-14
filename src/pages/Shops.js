@@ -6,7 +6,7 @@ import Page from '../components/Page';
 import Iconify from '../components/Iconify';
 import { ShopCard, ShopsSearch, ShopsSort } from '../sections/@dashboard/shops';
 //
-import SHOPS from '../_mocks_/blog';
+import SHOPS from '../_mocks_/shops';
 
 // ----------------------------------------------------------------------
 

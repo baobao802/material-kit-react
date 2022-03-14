@@ -1,8 +1,5 @@
 import faker from '@faker-js/faker/locale/vi';
 import { sample } from 'lodash';
-// utils
-import { mockImgAvatar } from '../utils/mockImages';
-// ----------------------------------------------------------------------
 
 const citis = [
   {
@@ -1039,7 +1036,7 @@ const users = [...Array(24)].map((_, index) => ({
   street: faker.address.streetAddress(),
   district: pickedCity.districts[Math.floor(Math.random() * pickedCity.districts.length)],
   city: pickedCity.name,
-  avatarUrl: mockImgAvatar(index + 1),
+  avatarUrl: faker.image.avatar(),
   isVerified: faker.datatype.boolean(),
   status: sample(['active', 'banned'])
 }));
