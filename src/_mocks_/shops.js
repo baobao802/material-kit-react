@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
+import { sample } from 'lodash';
 // utils
-import { mockImgCover } from '../utils/mockImages';
 
 // ----------------------------------------------------------------------
 
@@ -1049,7 +1049,10 @@ const shops = [...Array(23)].map(() => ({
     name: faker.name.findName(),
     avatarUrl: faker.image.avatar()
   },
-  createdAt: faker.date.past()
+  openAt: faker.time.recent('date'),
+  closeAt: faker.time.recent('date'),
+  createdAt: faker.date.past(),
+  status: sample(['openned', 'closed'])
 }));
 
 export default shops;

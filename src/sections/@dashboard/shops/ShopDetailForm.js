@@ -13,21 +13,34 @@ import {
   Select,
   MenuItem,
   Input,
-  IconButton
+  IconButton,
+  styled,
+  Box,
+  TextareaAutosize
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TimePicker from '@mui/lab/TimePicker';
 // component
 import useProvinces from '../../../hooks/useProvinces';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserDetailForm({ defaultValues }) {
+const CoverImgStyle = styled('img')({
+  top: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  borderRadius: '10px'
+});
+
+export default function ShopDetailForm({ defaultValues }) {
   const navigate = useNavigate();
   const { execute, value: provinces } = useProvinces();
-  const [showPassword, setShowPassword] = useState(false);
   const [pickedCity, setPickedCity] = useState(null);
-  const { name, avatarUrl } = defaultValues;
+  const { name, cover } = defaultValues;
   const cities =
     provinces?.map(({ code, name, districts }) => ({
       code,
@@ -53,27 +66,24 @@ export default function UserDetailForm({ defaultValues }) {
 
   const formik = useFormik({
     initialValues: defaultValues ?? {
-      firstName: '',
-      lastName: '',
-      gender: '',
+      name: '',
+      description: '',
+      cover: '',
       email: '',
-      position: '',
       status: '',
       city: '',
       district: '',
-      street: ''
+      street: '',
+      openAt: '',
+      closeAt: ''
     },
     validationSchema,
     onSubmit: () => {
-      navigate('/dashboard/users', { replace: true });
+      navigate('/dashboard/shops', { replace: true });
     }
   });
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-
-  const handleShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
 
   const onFileUpload = (e) => {
     // Create an object of formData
@@ -88,62 +98,68 @@ export default function UserDetailForm({ defaultValues }) {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Stack direction="row" justifyContent="center" mb={3}>
-              <Avatar
-                alt={name}
-                src={avatarUrl || '/static/images/broken-avatar.png'}
-                sx={{ width: 132, height: 132 }}
-              />
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label
-                htmlFor="icon-button-file"
-                style={{ display: 'flex', alignItems: 'end', transform: 'translateX(-20px)' }}
-              >
-                <Input
-                  accept="image/*"
-                  id="icon-button-file"
-                  type="file"
-                  sx={{ display: 'none' }}
-                  onChange={(e) => console.log(e.target.files[0])}
-                />
-                <IconButton color="primary" aria-label="upload picture" component="span">
-                  <Iconify icon="bi:camera-fill" width={24} height={24} />
-                </IconButton>
-              </label>
+            <Stack direction="row" mb={3}>
+              <Box width="100%" height="420px" position="relative" mb={5}>
+                <CoverImgStyle src={cover} alt={name} />
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                <label
+                  htmlFor="icon-button-file"
+                  style={{ position: 'absolute', top: '0px', right: '0px' }}
+                >
+                  <Input
+                    accept="image/*"
+                    id="icon-button-file"
+                    type="file"
+                    sx={{ display: 'none' }}
+                    onChange={onFileUpload}
+                  />
+                  <IconButton sx={{ color: 'white' }} aria-label="upload picture" component="span">
+                    <Iconify icon="bi:camera-fill" width={24} height={24} />
+                  </IconButton>
+                </label>
+              </Box>
             </Stack>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              type="text"
-              label="First name"
-              {...getFieldProps('firstName')}
-              disabled
-            />
+          <Grid item xs={12} sm={8}>
+            <TextField fullWidth type="text" label="Shop's name" {...getFieldProps('name')} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              type="text"
-              label="Last name"
-              {...getFieldProps('lastName')}
-              disabled
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField fullWidth type="text" label="Gender" {...getFieldProps('gender')} disabled />
-          </Grid>
-          <Grid item xs={12} sm={9}>
             <TextField fullWidth type="email" label="Email" {...getFieldProps('email')} disabled />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={9}>
             <TextField
               fullWidth
+              multiline
               type="text"
-              label="Position"
-              {...getFieldProps('position')}
-              disabled
+              label="Description"
+              rows={4}
+              maxRows={5}
+              placeholder="Describe about your shope"
+              {...getFieldProps('description')}
+              style={{ resize: 'vertical' }}
             />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <TimePicker
+                    label="Open at"
+                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    {...getFieldProps('openAt')}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={12}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <TimePicker
+                    label="Close at"
+                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    {...getFieldProps('closeAt')}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={3}>
             <FormControl fullWidth>
@@ -157,7 +173,6 @@ export default function UserDetailForm({ defaultValues }) {
                   setPickedCity(cities.find((city) => city.name === e.target.value));
                   getFieldProps('city').onChange(e);
                 }}
-                disabled
               >
                 {cities.map(({ code, name }) => (
                   <MenuItem key={code} value={name}>
@@ -175,7 +190,6 @@ export default function UserDetailForm({ defaultValues }) {
                 id="district"
                 label="District"
                 {...getFieldProps('district')}
-                disabled
               >
                 {pickedCity?.districts.map(({ code, name }) => (
                   <MenuItem key={code} value={name}>
@@ -186,7 +200,7 @@ export default function UserDetailForm({ defaultValues }) {
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth type="text" label="Street" {...getFieldProps('street')} disabled />
+            <TextField fullWidth type="text" label="Street" {...getFieldProps('street')} />
           </Grid>
           <Grid item xs={12} sm={3}>
             <FormControl fullWidth>
@@ -197,8 +211,8 @@ export default function UserDetailForm({ defaultValues }) {
                 label="Status"
                 {...getFieldProps('status')}
               >
-                <MenuItem value="active">Active</MenuItem>
-                <MenuItem value="banned">Banned</MenuItem>
+                <MenuItem value="opened">Opened</MenuItem>
+                <MenuItem value="closed">Closed</MenuItem>
               </Select>
             </FormControl>
           </Grid>
