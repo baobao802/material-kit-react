@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import { authApi } from '../../../apis';
+import AutocompleteMapPlace from '../../../components/AutocompleteMapPlace';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
@@ -21,7 +23,12 @@ export default function RegisterForm() {
       .required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required')
+    password: Yup.string().required('Password is required'),
+    salonName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(100, 'Too Long!')
+      .required("Salon's name required"),
+    address: Yup.string().required()
   });
 
   const formik = useFormik({
@@ -29,15 +36,21 @@ export default function RegisterForm() {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      salonName: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
+    onSubmit: async (values) => {
+      try {
+        await authApi.signup(values);
+      } catch (error) {
+        console.error(error);
+      }
       navigate('/login', { replace: true });
     }
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -46,7 +59,7 @@ export default function RegisterForm() {
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
-              label="First name"
+              label="Họ"
               {...getFieldProps('firstName')}
               error={Boolean(touched.firstName && errors.firstName)}
               helperText={touched.firstName && errors.firstName}
@@ -54,7 +67,7 @@ export default function RegisterForm() {
 
             <TextField
               fullWidth
-              label="Last name"
+              label="Tên"
               {...getFieldProps('lastName')}
               error={Boolean(touched.lastName && errors.lastName)}
               helperText={touched.lastName && errors.lastName}
@@ -65,7 +78,7 @@ export default function RegisterForm() {
             fullWidth
             autoComplete="username"
             type="email"
-            label="Email address"
+            label="Email"
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
@@ -75,7 +88,7 @@ export default function RegisterForm() {
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label="Mật khẩu"
             {...getFieldProps('password')}
             InputProps={{
               endAdornment: (
@@ -90,6 +103,23 @@ export default function RegisterForm() {
             helperText={touched.password && errors.password}
           />
 
+          <TextField
+            fullWidth
+            autoComplete="salon-name"
+            type="text"
+            label="Tên cửa hàng"
+            {...getFieldProps('salonName')}
+            error={Boolean(touched.salonName && errors.salonName)}
+            helperText={touched.salonName && errors.salonName}
+          />
+
+          <AutocompleteMapPlace
+            {...getFieldProps('address')}
+            setFormikFieldValue={setFieldValue}
+            error={Boolean(touched.address && errors.address)}
+            helperText={touched.address && errors.address}
+          />
+
           <LoadingButton
             fullWidth
             size="large"
@@ -97,7 +127,7 @@ export default function RegisterForm() {
             variant="contained"
             loading={isSubmitting}
           >
-            Register
+            Đăng ký
           </LoadingButton>
         </Stack>
       </Form>

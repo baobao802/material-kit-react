@@ -17,6 +17,7 @@ import { LoadingButton } from '@mui/lab';
 import { useDispatch } from 'react-redux';
 import Iconify from '../../../components/Iconify';
 import { login } from '../authSlice';
+import { authApi } from '../../../apis';
 
 // ----------------------------------------------------------------------
 
@@ -37,9 +38,14 @@ export default function LoginForm() {
       remember: true
     },
     validationSchema,
-    onSubmit: (values) => {
-      dispatch(login());
-      navigate('/dashboard/app', { replace: true });
+    onSubmit: async (values) => {
+      try {
+        const res = await authApi.login(values);
+        dispatch(login(res.data));
+        navigate('/dashboard/app', { replace: true });
+      } catch (error) {
+        console.error(error);
+      }
     }
   });
 

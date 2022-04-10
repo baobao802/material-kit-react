@@ -42,15 +42,15 @@ export default function Login() {
   return (
     <RootStyle title="Login | Minimal-UI">
       <AuthLayout>
-        Don’t have an account? &nbsp;
+        Bạn chưa có tài khoản? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
-          Get started
+          Bắt đầu
         </Link>
       </AuthLayout>
 
       <SectionStyle sx={{ display: { xs: 'none', md: 'flex' } }}>
         <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-          Hi, Welcome Back
+          Xin chào
         </Typography>
         <img src="/static/illustrations/illustration_login.png" alt="login" />
       </SectionStyle>
@@ -59,15 +59,15 @@ export default function Login() {
         <ContentStyle>
           <Stack sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Đăng nhập vào hệ thống
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>Điền thông tin vào phía dưới.</Typography>
           </Stack>
           <AuthSocial />
 
           <LoginForm />
 
-          <Typography
+          {/* <Typography
             variant="body2"
             align="center"
             sx={{
@@ -79,7 +79,7 @@ export default function Login() {
             <Link variant="subtitle2" component={RouterLink} to="register" underline="hover">
               Get started
             </Link>
-          </Typography>
+          </Typography> */}
         </ContentStyle>
       </Container>
     </RootStyle>

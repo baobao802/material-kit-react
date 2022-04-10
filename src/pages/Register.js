@@ -40,11 +40,11 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Register() {
   return (
-    <RootStyle title="Register | Minimal-UI">
+    <RootStyle title="Đăng ký mở salon | BaberBooking">
       <AuthLayout>
-        Already have an account? &nbsp;
+        Bạn đã có tài khoản salon? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/login">
-          Login
+          Đăng nhập
         </Link>
       </AuthLayout>
 
@@ -59,18 +59,18 @@ export default function Register() {
         <ContentStyle>
           <Box sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Get started absolutely free.
+              Đăng ký mở tài khoản salon miễn phí.
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
-              Free forever. No credit card needed.
+              Sự nghiệp cầu đầu thiên hạ trên nền tảng online của chúng tôi.
             </Typography>
           </Box>
 
-          <AuthSocial />
+          {/* <AuthSocial /> */}
 
           <RegisterForm />
 
-          <Typography variant="body2" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
+          {/* <Typography variant="body2" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
             By registering, I agree to Minimal&nbsp;
             <Link underline="always" color="textPrimary">
               Terms of Service
@@ -80,7 +80,7 @@ export default function Register() {
               Privacy Policy
             </Link>
             .
-          </Typography>
+          </Typography> */}
 
           <Typography
             variant="subtitle2"
