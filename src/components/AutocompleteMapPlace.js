@@ -35,7 +35,7 @@ export default function AutocompleteMapPlace({ setFormikFieldValue, ...inputProp
   if (typeof window !== 'undefined' && !loaded.current) {
     if (!document.querySelector('#google-maps')) {
       loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&region=vi&language=vi`,
         document.querySelector('head'),
         'google-maps'
       );
@@ -98,14 +98,23 @@ export default function AutocompleteMapPlace({ setFormikFieldValue, ...inputProp
       autoComplete
       includeInputInList
       filterSelectedOptions
+      lang="vn"
       value={value}
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        const street = newValue.structured_formatting.main_text;
+        const districtAndCity = newValue.structured_formatting.secondary_text;
+        const address = {
+          street,
+          district: districtAndCity[districtAndCity.length - 2],
+          city: districtAndCity[districtAndCity.length - 1],
+          place_id: newValue.place_id
+        };
+        setFormikFieldValue('address', address);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
-        setFormikFieldValue('address', newInputValue);
       }}
       renderInput={(params) => <TextField {...params} {...inputProps} label="Địa chỉ" fullWidth />}
       renderOption={(props, option) => {

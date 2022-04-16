@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const baberBooking = localStorage.getItem('BABER-BOOKING')
   ? JSON.parse(localStorage.getItem('BABER-BOOKING'))
-  : null;
+  : {};
 
 const initialState = {
-  user: baberBooking && baberBooking.user
+  user: baberBooking.user || {}
 };
 
 export const authSlice = createSlice({
@@ -17,12 +17,20 @@ export const authSlice = createSlice({
       localStorage.setItem(
         'BABER-BOOKING',
         JSON.stringify({
+          ...baberBooking,
           user: action.payload
         })
       );
     },
     logout: (state) => {
       state.user = null;
+      localStorage.setItem(
+        'BABER-BOOKING',
+        JSON.stringify({
+          ...baberBooking,
+          user: null
+        })
+      );
     }
   }
 });

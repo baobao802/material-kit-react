@@ -16,15 +16,16 @@ import NotFound from './pages/Page404';
 
 // ----------------------------------------------------------------------
 
-function RequireAuth({ children }) {
+function RequireAuth(props) {
   const auth = useSelector((state) => state.auth);
   const location = useLocation();
 
-  if (!auth.user) {
+  if (!auth.user.access_token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return children;
+  // eslint-disable-next-line react/prop-types
+  return props.children;
 }
 
 export default function Router() {

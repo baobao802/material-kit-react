@@ -57,11 +57,20 @@ ShopCard.propTypes = {
 };
 
 export default function ShopCard({ shop }) {
-  const { cover, name, description, views, favorites, owner } = shop;
+  const {
+    id,
+    avatar,
+    background_image: bgImage,
+    salon_name: salonName,
+    description,
+    views,
+    favorites,
+    owner
+  } = shop;
 
   const SHOP_INFO = [
-    { number: favorites, icon: 'eva:heart-fill' },
-    { number: views, icon: 'eva:eye-fill' }
+    { number: 98, icon: 'eva:heart-fill' },
+    { number: 1000, icon: 'eva:eye-fill' }
   ];
 
   return (
@@ -79,9 +88,9 @@ export default function ShopCard({ shop }) {
               position: 'absolute'
             }}
           />
-          <AvatarStyle alt={owner.name} src={owner.avatarUrl} />
+          <AvatarStyle alt={salonName} src={avatar || '/static/images/broken-avatar.png'} />
 
-          <CoverImgStyle alt={name} src={cover} />
+          <CoverImgStyle alt={salonName} src={bgImage || '/static/images/bg-placeholder.png'} />
         </CardMediaStyle>
 
         <CardContent
@@ -98,13 +107,13 @@ export default function ShopCard({ shop }) {
           />
 
           <TitleStyle
-            to={`/dashboard/shops/${shop.id}`}
+            to={`/dashboard/shops/${id}`}
             color="inherit"
             variant="subtitle2"
             underline="hover"
             component={RouterLink}
           >
-            {name}
+            {salonName}
           </TitleStyle>
 
           <Typography
@@ -132,7 +141,7 @@ export default function ShopCard({ shop }) {
                 }}
               >
                 <Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />
-                <Typography variant="caption">{fShortenNumber(info.number)}</Typography>
+                <Typography variant="caption">{info.number}</Typography>
               </Box>
             ))}
           </InfoStyle>

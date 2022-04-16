@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
-import { authApi } from '../../../apis';
+import { shopApi } from '../../../apis';
 import AutocompleteMapPlace from '../../../components/AutocompleteMapPlace';
 import Iconify from '../../../components/Iconify';
 
@@ -42,7 +42,7 @@ export default function RegisterForm() {
     validationSchema: RegisterSchema,
     onSubmit: async (values) => {
       try {
-        await authApi.signup(values);
+        await shopApi.registerShop(values);
       } catch (error) {
         console.error(error);
       }

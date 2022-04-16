@@ -1,6 +1,8 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import useSWR from 'swr';
+import { shopApi } from '../apis';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
@@ -19,6 +21,8 @@ const SORT_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function Shops() {
+  const { data } = useSWR('getShops', shopApi.getShops);
+
   return (
     <Page title="Dashboard: Shops | Minimal-UI">
       <Container>
@@ -42,7 +46,7 @@ export default function Shops() {
         </Stack>
 
         <Grid container spacing={3}>
-          {SHOPS.map((shop) => (
+          {data?.map((shop) => (
             <ShopCard key={shop.id} shop={shop} />
           ))}
         </Grid>
