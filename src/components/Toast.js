@@ -5,7 +5,7 @@ const Alert = React.forwardRef((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 ));
 
-function Toast({ duration = 0, isOpen, onClose, message, variant }) {
+function Toast({ duration, isOpen, onClose, message, variant }) {
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
       <Snackbar open={isOpen} autoHideDuration={duration} onClose={onClose}>
