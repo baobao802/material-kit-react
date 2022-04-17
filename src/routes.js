@@ -24,8 +24,12 @@ function RequireAuth(props) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  if ((auth.user.data.is_salon && props.isShop) || (auth.user.data.is_superuser && props.isAdmin)) {
+    return props.children;
+  }
+
   // eslint-disable-next-line react/prop-types
-  return props.children;
+  return <Navigate to="/404" />;
 }
 
 export default function Router() {
@@ -37,7 +41,7 @@ export default function Router() {
         {
           path: 'app',
           element: (
-            <RequireAuth>
+            <RequireAuth isAdmin isShop>
               <DashboardApp />
             </RequireAuth>
           )
@@ -45,7 +49,7 @@ export default function Router() {
         {
           path: 'users',
           element: (
-            <RequireAuth>
+            <RequireAuth isAdmin>
               <Users />
             </RequireAuth>
           )
@@ -53,7 +57,7 @@ export default function Router() {
         {
           path: 'users/:userId',
           element: (
-            <RequireAuth>
+            <RequireAuth isAdmin>
               <UserDetail />
             </RequireAuth>
           )
@@ -61,7 +65,7 @@ export default function Router() {
         {
           path: 'shops',
           element: (
-            <RequireAuth>
+            <RequireAuth isAdmin>
               <Shops />
             </RequireAuth>
           )
@@ -69,7 +73,7 @@ export default function Router() {
         {
           path: 'shops/:shopId',
           element: (
-            <RequireAuth>
+            <RequireAuth isAdmin>
               <ShopDetail />
             </RequireAuth>
           )

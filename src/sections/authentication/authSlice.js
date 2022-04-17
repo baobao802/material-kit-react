@@ -39,3 +39,8 @@ export const authSlice = createSlice({
 export const { login, logout } = authSlice.actions;
 
 export default authSlice.reducer;
+
+export const selectRole = (state) => ({
+  isShop: state.auth.user.data.is_salo,
+  isAdmin: state.auth.user.data.is_superadmin
+});
